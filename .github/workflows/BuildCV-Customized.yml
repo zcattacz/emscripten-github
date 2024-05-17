@@ -73,7 +73,7 @@ jobs:
           submodules: recursive
           
       # patch build_js.py to disable modules like dnn etc.
-      - name Patch
+      - name: Patch
         run: |
           cp build_js.py opencv-${{matrix.config.ocv_ver}}/platforms/js/
 
