@@ -23,7 +23,7 @@ jobs:
             code_coverage: "OFF",
             clang_format: "OFF"
         }
-        ocv_ver: ["4.3.0", "4.9.0", "head"]
+        ocv_ver: ["4.3.0", "4.9.0", ""]
     steps:
       - uses: actions/checkout@v3
 
