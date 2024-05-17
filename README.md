@@ -1,3 +1,6 @@
+[![Emscripten](https://github.com/zcattacz/emscripten-github/actions/workflows/Emscripten.yml/badge.svg)](https://github.com/zcattacz/emscripten-github/actions/workflows/Emscripten.yml)
+
+
 # How-to
 1. Run workflow: "Emscripten" passing the application to build. e.g. "TemplateApp"
 2. github pages auto updates based on the branch
