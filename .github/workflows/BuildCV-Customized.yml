@@ -48,8 +48,6 @@ jobs:
             ${{ matrix.os }}-cpm-
 
       - uses: mymindstorm/setup-emsdk@v9
-        if: contains(matrix.config.name, 'emscripten')
-
       - name: print emscripten version
         if: contains(matrix.config.name, 'emscripten')
         run: |
@@ -73,12 +71,15 @@ jobs:
           path: opencv-${{ matrix.config.ocv_ver }}
           ref: ${{ matrix.config.ocv_ver }}
           submodules: recursive
-        
+          
+      # patch build_js.py to disable modules like dnn etc.
+      - name Patch
+        run: |
+          cp build_js.py opencv-${{matrix.config.ocv_ver}}/platforms/js/
+
       - name: Build
         shell: bash
         run: |
-          # patch build_js.py to disable modules like dnn etc.
-          cp build_js.py opencv-${{ matrix.config.ocv_ver }}/platforms/js/
           export CC=${{ matrix.config.CC }}
           export CXX=${{ matrix.config.CXX }}
           emcmake \
