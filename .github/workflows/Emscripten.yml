@@ -21,8 +21,9 @@ jobs:
             code_coverage: "OFF",
             clang_format: "OFF",
         }
-        ocv_ver: "4.8.1"
-        #- { ocv_ver: 4.9.0 }
+        list:
+        - { ocv_ver: 4.8.1 }
+        - { ocv_ver: 4.9.0 }
     steps:
       - uses: actions/checkout@v3
 
@@ -95,13 +96,13 @@ jobs:
         if: always()
         run: |
           ls -laR
-          7z a ../${{ matrix.config.name }}.7z .
+          7z a ../${{ matrix.config.name }}-{{ matrix.ocv_ver }}.7z .
 
       - name: Upload Build Developer Logs
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: 'z-${{ matrix.config.name }}-build_dev_logs'
+          name: 'z-${{ matrix.config.name }}-{{ matrix.ocv_ver }}-build_dev_logs'
           path: |
             ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.txt
             ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcda
@@ -126,8 +127,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v1
         with:
-          path: ./${{ matrix.config.name }}.7z
-          name: ${{ matrix.config.name }}.7z
+          path: ./${{ matrix.config.name }}-{{ matrix.ocv_ver }}.7z
+          name: ${{ matrix.config.name }}-{{ matrix.ocv_ver }}.7z
 
       - name: Upload release asset
         #if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
@@ -136,6 +137,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ matrix.config.name }}.7z
-          asset_name: ${{ matrix.config.name }}.7z.zip
+          asset_path: ./${{ matrix.config.name }}-{{ matrix.ocv_ver }}.7z
+          asset_name: ${{ matrix.config.name }}-{{ matrix.ocv_ver }}.7z.zip
           asset_content_type: application/zip
