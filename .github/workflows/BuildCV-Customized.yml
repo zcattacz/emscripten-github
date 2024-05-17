@@ -22,7 +22,7 @@ jobs:
             ccache: "ON",
             code_coverage: "OFF",
             clang_format: "OFF",
-            ocv_ver: "4.9.0"
+            ocv_ver: ["4.9.0", "latest"]
         }
     steps:
       - uses: actions/checkout@v3
