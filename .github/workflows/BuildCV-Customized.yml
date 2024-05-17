@@ -92,17 +92,20 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
             -DGITHUB_CI=ON \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-            
+            -DBUILD_LIST=js,core,imgproc
         #run: opencv-${{ matrix.config.ocv_ver }}/platforms/js/build_js.py build_js
         #run: cmake --build apps/${{ github.event.inputs.project }}/build --config ${{ matrix.config.build_type }}
 
       - name: Pack
         shell: bash
-        working-directory: build_wasm
+        working-directory: build_wasm/bin
         if: always()
         run: |
           ls -laR
-          7z a ../${{ matrix.config.name }}-${{ matrix.config.ocv_ver }}.7z .
+          sed "s#return cv.ready#return cv; //return cv.ready#" -i build_wasm/opencv.js
+          rm opencv_js.js, loader.js
+          7z a ../${{ matrix.config.name }}-${{matrix.config.ocv_ver}}.7z .
+        # opencv.js patch see here: https://stackoverflow.com/questions/67190799/how-to-include-cv-imread-when-building-opencv-js
 
       - name: Upload Build Developer Logs
         uses: actions/upload-artifact@v2
