@@ -257,6 +257,8 @@ if __name__ == "__main__":
     parser.add_argument('--webnn', action="store_true", help="Enable WebNN Backend")
 
     transformed_args = ["--cmake_option=%s".format(arg) if arg[:2] == "-D" else arg for arg in sys.argv[1:]]
+    print(transformed_args)
+    log.info("transformed Args: %s", transformed_args)
     args = parser.parse_args(transformed_args)
 
     log.debug("Args: %s", args)
