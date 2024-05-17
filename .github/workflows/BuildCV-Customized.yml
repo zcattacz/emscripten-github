@@ -2,7 +2,8 @@ name: BuildCV_Customized
 
 on:
   release:
-    types: [published, created]
+    #types: [published, created]
+    types: [created]
 
 jobs:
   build:
