@@ -87,11 +87,11 @@ jobs:
           python opencv-${{ matrix.config.ocv_ver }}/platforms/js/build_js.py build_wasm \
             --build_wasm \
             --disable_single_file \
-            --cmake_option="-DCMAKE_C_COMPILER_LAUNCHER=ccache" \
-            --cmake_option="-DCMAKE_CXX_COMPILER_LAUNCHER=ccache" \
-            --cmake_option="-DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}" \
-            --cmake_option="-DGITHUB_CI=ON" \
-            --cmake_option="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+            -DGITHUB_CI=ON \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
             
         #run: opencv-${{ matrix.config.ocv_ver }}/platforms/js/build_js.py build_js
         #run: cmake --build apps/${{ github.event.inputs.project }}/build --config ${{ matrix.config.build_type }}
