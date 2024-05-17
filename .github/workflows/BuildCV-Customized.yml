@@ -1,0 +1,147 @@
+name: Emscripten
+
+on: workflow_dispatch
+  
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: "ubuntu-emscripten",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "emcc",
+            cxx: "em++",
+            generators: "Ninja",
+            ccache: "OFF",
+            code_coverage: "OFF",
+            clang_format: "OFF",
+        }
+        list:
+        #- { ocv_ver: 4.8.1 }
+        - { ocv_ver: 4.9.0 }
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Print env
+        run: |
+          echo github.event.action: ${{ github.event.action }}
+          echo github.event_name: ${{ github.event_name }}
+
+      - name: ccache
+        if: startsWith(matrix.config.ccache, 'ON')
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: ${{ matrix.os }}-${{ matrix.build_type }}
+          max-size: 500M
+
+      - name: CPM Cache
+        id: cache-cpm
+        uses: actions/cache@v2
+        with:
+          path: $GITHUB_WORKSPACE/.cpmcache
+          key: ${{ matrix.os }}-cpm-${{ hashFiles('**/') }}
+          restore-keys: |
+            ${{ matrix.os }}-cpm-
+
+      - uses: mymindstorm/setup-emsdk@v9
+        if: contains(matrix.config.name, 'emscripten')
+
+      - name: print emscripten version
+        if: contains(matrix.config.name, 'emscripten')
+        run: |
+          emcc --version
+
+      - name: Install dependencies on ubuntu
+        if: startsWith(matrix.config.name, 'ubuntu')
+        run: |
+          sudo apt-get update --fix-missing
+          #sudo apt-get install ninja-build
+          #sudo apt-get install libgles2-mesa-dev
+          #ninja --version
+          cmake --version
+          gcc --version
+          clang --version
+
+      - name: checkout opencv
+        uses: actions/checkout@v3
+        with:
+          repository: opencv/opencv
+          path: opencv-${{ matrix.ocv_ver }}
+          ref: ${{ matrix.ocv_ver }}
+          submodules: recursive
+        
+      - name: Build
+        shell: bash
+        run: |
+          # patch build_js.py to disable modules like dnn etc.
+          cp build_js.py opencv-${{ matrix.ocv_ver }}/platforms/js/
+          export CC=${{ matrix.config.CC }}
+          export CXX=${{ matrix.config.CXX }}
+          emcmake \
+          python opencv-${{ matrix.ocv_ver }}/platforms/js/build_js.py build_wasm \
+            --build_wasm \
+            --disable_single_file \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+            -DGITHUB_CI=ON \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            
+        #run: opencv-${{ matrix.ocv_ver }}/platforms/js/build_js.py build_js
+        #run: cmake --build apps/${{ github.event.inputs.project }}/build --config ${{ matrix.config.build_type }}
+
+      - name: Pack
+        shell: bash
+        working-directory: build_wasm
+        if: always()
+        run: |
+          ls -laR
+          7z a ../${{ matrix.config.name }}-${{ matrix.ocv_ver }}.7z .
+
+      - name: Upload Build Developer Logs
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: 'z-${{ matrix.config.name }}-${{ matrix.ocv_ver }}-build_dev_logs'
+          path: |
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.txt
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcda
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcno
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*codecov*
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.xml
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cmake
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.log
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.json
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcov
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.info
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/.*
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.h
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.hpp
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.c
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cpp
+            !./opencv-${{ matrix.ocv_ver }}/**/build/**/_deps
+            !*/.git/**/*
+          retention-days: 1
+
+      - name: Upload
+        if: always()
+        uses: actions/upload-artifact@v1
+        with:
+          path: ./${{ matrix.config.name }}-${{ matrix.ocv_ver }}.7z
+          name: ${{ matrix.config.name }}-${{ matrix.ocv_ver }}.7z
+
+      - name: Upload release asset
+        #if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./${{ matrix.config.name }}-${{ matrix.ocv_ver }}.7z
+          asset_name: ${{ matrix.config.name }}-${{ matrix.ocv_ver }}.7z.zip
+          asset_content_type: application/zip
