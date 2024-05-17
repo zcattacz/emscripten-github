@@ -1,11 +1,6 @@
 name: Emscripten
 
-on:
-    workflow_dispatch:
-      inputs:
-        project:
-          type: string
-          description: What application to build    
+on: workflow_dispatch
   
 jobs:
   build:
@@ -26,9 +21,8 @@ jobs:
             code_coverage: "OFF",
             clang_format: "OFF",
         }
-        list:
-        - { ocv_ver: 4.8.1 }
-        - { ocv_ver: 4.9.0 }
+        ocv_ver: "4.8.1"
+        #- { ocv_ver: 4.9.0 }
     steps:
       - uses: actions/checkout@v3
 
@@ -109,22 +103,22 @@ jobs:
         with:
           name: 'z-${{ matrix.config.name }}-build_dev_logs'
           path: |
-            ./apps/${{ github.event.inputs.project }}/build/**/*.txt
-            ./apps/${{ github.event.inputs.project }}/build/**/*.gcda
-            ./apps/${{ github.event.inputs.project }}/build/**/*.gcno
-            ./apps/${{ github.event.inputs.project }}/build/**/*codecov*
-            ./apps/${{ github.event.inputs.project }}/build/**/*.xml
-            ./apps/${{ github.event.inputs.project }}/build/**/*.cmake
-            ./apps/${{ github.event.inputs.project }}/build/**/*.log
-            ./apps/${{ github.event.inputs.project }}/build/**/*.json
-            ./apps/${{ github.event.inputs.project }}/build/**/*.gcov
-            ./apps/${{ github.event.inputs.project }}/build/**/*.info
-            ./apps/${{ github.event.inputs.project }}/build/**/.*
-            ./apps/${{ github.event.inputs.project }}/build/**/*.h
-            ./apps/${{ github.event.inputs.project }}/build/**/*.hpp
-            ./apps/${{ github.event.inputs.project }}/build/**/*.c
-            ./apps/${{ github.event.inputs.project }}/build/**/*.cpp
-            !./apps/${{ github.event.inputs.project }}/build/_deps
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.txt
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcda
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcno
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*codecov*
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.xml
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cmake
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.log
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.json
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcov
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.info
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/.*
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.h
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.hpp
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.c
+            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cpp
+            !./opencv-${{ matrix.ocv_ver }}/**/build/**/_deps
             !*/.git/**/*
           retention-days: 1
 
