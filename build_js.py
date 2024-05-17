@@ -140,7 +140,7 @@ class Builder:
                "-DBUILD_opencv_js=ON",
                "-DBUILD_opencv_python2=OFF",
                "-DBUILD_opencv_python3=OFF",
-               "-DBUILD_EXAMPLES=OFF",
+               "-DBUILD_EXAMPLES=ON",
                "-DBUILD_PACKAGE=OFF",
                "-DBUILD_TESTS=ON",
                "-DBUILD_PERF_TESTS=ON"]
