@@ -25,7 +25,10 @@ jobs:
             ccache: "OFF",
             code_coverage: "OFF",
             clang_format: "OFF",
-          }
+        }
+        list:
+        - { ocv_ver: 4.8.1 }
+        - { ocv_ver: 4.9.0 }
     steps:
       - uses: actions/checkout@v3
 
@@ -62,87 +65,39 @@ jobs:
         if: startsWith(matrix.config.name, 'ubuntu')
         run: |
           sudo apt-get update --fix-missing
-          sudo apt-get install ninja-build
-          sudo apt-get install libgles2-mesa-dev
-          ninja --version
+          #sudo apt-get install ninja-build
+          #sudo apt-get install libgles2-mesa-dev
+          #ninja --version
           cmake --version
           gcc --version
           clang --version
 
-      - name: Configure (EMSCRIPTEN)
-        if: contains(matrix.config.name, 'emscripten')
+      - name: checkout opencv
+        uses: actions/checkout@v3
+        with:
+          repository: opencv/opencv
+          path: opencv-${{ matrix.ocv_ver }}
+          ref: ${{ matrix.ocv_ver }}
+          submodules: recursive
+        
+      - name: Build
         shell: bash
         run: |
           export CC=${{ matrix.config.CC }}
           export CXX=${{ matrix.config.CXX }}
           emcmake \
-            cmake \
-            -S apps/${{ github.event.inputs.project }} \
-            -B apps/${{ github.event.inputs.project }}/build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-            -DGITHUB_CI=ON \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -G "${{ matrix.config.generators }}"
-
-      - name: Configure (CCACHE)
-        if: startsWith(matrix.config.ccache, 'ON')
-        shell: bash
-        run: |
-          export CC=${{ matrix.config.CC }}
-          export CXX=${{ matrix.config.CXX }}
-          cmake \
-            -S apps/${{ github.event.inputs.project }} \
-            -B apps/${{ github.event.inputs.project }}/build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+          python opencv-${{ matrix.ocv_ver }}/platforms/js/build_js.py build_wasm --build_wasm \
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DGITHUB_CI=ON \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -G "${{ matrix.config.generators }}"
-
-      - name: Configure
-        if: startsWith(matrix.config.ccache, 'OFF')
-        shell: bash
-        run: |
-          export CC=${{ matrix.config.CC }}
-          export CXX=${{ matrix.config.CXX }}
-          cmake \
-            -S apps/${{ github.event.inputs.project }} \
-            -B apps/${{ github.event.inputs.project }}/build \
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
             -DGITHUB_CI=ON \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -G "${{ matrix.config.generators }}"
-
-      - name: Build
-        shell: bash
-        run: cmake --build apps/${{ github.event.inputs.project }}/build --config ${{ matrix.config.build_type }}
-
-      - name: Install Strip
-        shell: bash
-        run: |
-          mkdir -p instdir
-          cmake --install apps/${{ github.event.inputs.project }}/build --strip --prefix=instdir
-
-      - name: Prepare Github Page
-        shell: bash
-        if: contains(matrix.config.name, 'emscripten')
-        run: |
-          ls apps/${{ github.event.inputs.project }}/build 
-          mv apps/${{ github.event.inputs.project }}/build/${{ github.event.inputs.project }}.html apps/${{ github.event.inputs.project }}/build/index.html
-          rm -rf apps/${{ github.event.inputs.project }}/build/CMakeFiles
-          rm -f apps/${{ github.event.inputs.project }}/build/cmake_install.cmake
-
-      - name: Deploy Github Page
-        uses: JamesIves/github-pages-deploy-action@4.1.4
-        if: contains(matrix.config.name, 'emscripten')
-        with:
-          branch: gh-pages-${{ github.event.inputs.project }}
-          folder: apps/${{ github.event.inputs.project }}/build/
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        #run: opencv-${{ matrix.ocv_ver }}/platforms/js/build_js.py build_js
+        #run: cmake --build apps/${{ github.event.inputs.project }}/build --config ${{ matrix.config.build_type }}
 
       - name: Pack
         shell: bash
-        working-directory: instdir
+        working-directory: build_wasm
         if: always()
         run: |
           ls -laR
