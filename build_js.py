@@ -123,7 +123,7 @@ class Builder:
                "-DBUILD_opencv_apps=OFF",
                "-DBUILD_opencv_calib3d=OFF",
                "-DBUILD_opencv_dnn=OFF",
-               "-DBUILD_opencv_features2d=OFF",
+               "-DBUILD_opencv_features2d=ON",
                "-DBUILD_opencv_flann=OFF",  # No bindings provided. This module is used as a dependency for other modules.
                "-DBUILD_opencv_gapi=OFF",
                "-DBUILD_opencv_ml=OFF",
