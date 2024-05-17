@@ -91,7 +91,7 @@ jobs:
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
             -DGITHUB_CI=ON \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DBUILD_LIST=js,core,imgproc
         #run: opencv-${{ matrix.config.ocv_ver }}/platforms/js/build_js.py build_js
         #run: cmake --build apps/${{ github.event.inputs.project }}/build --config ${{ matrix.config.build_type }}
