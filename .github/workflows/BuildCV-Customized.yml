@@ -103,7 +103,6 @@ jobs:
         run: |
           ls -laR
           sed "s#return cv.ready#return cv; //return cv.ready#" -i opencv.js
-          rm opencv_js.js, loader.js
           7z a ../${{ matrix.config.name }}-${{matrix.ocv_ver}}.7z .
         # opencv.js patch see here: https://stackoverflow.com/questions/67190799/how-to-include-cv-imread-when-building-opencv-js
 
