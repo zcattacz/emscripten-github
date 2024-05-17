@@ -23,7 +23,7 @@ jobs:
             code_coverage: "OFF",
             clang_format: "OFF"
         }
-        ocv_ver: ["4.3.0", "4.9.0", ""]
+        ocv_ver: ["4.5.5", "4.9.0", ""]
     steps:
       - uses: actions/checkout@v3
 
@@ -106,30 +106,30 @@ jobs:
           7z a ../${{ matrix.config.name }}-${{matrix.ocv_ver}}.7z .
         # opencv.js patch see here: https://stackoverflow.com/questions/67190799/how-to-include-cv-imread-when-building-opencv-js
 
-      - name: Upload Build Developer Logs
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: 'z-${{ matrix.config.name }}-${{ matrix.ocv_ver }}-build_dev_logs'
-          path: |
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.txt
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcda
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcno
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*codecov*
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.xml
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cmake
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.log
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.json
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcov
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.info
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/.*
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.h
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.hpp
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.c
-            ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cpp
-            !./opencv-${{ matrix.ocv_ver }}/**/build/**/_deps
-            !*/.git/**/*
-          retention-days: 1
+      #- name: Upload Build Developer Logs
+      #  uses: actions/upload-artifact@v2
+      #  if: always()
+      #  with:
+      #    name: 'z-${{ matrix.config.name }}-${{ matrix.ocv_ver }}-build_dev_logs'
+      #    path: |
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.txt
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcda
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcno
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*codecov*
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.xml
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cmake
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.log
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.json
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.gcov
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.info
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/.*
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.h
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.hpp
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.c
+      #      ./opencv-${{ matrix.ocv_ver }}/**/build/**/*.cpp
+      #      !./opencv-${{ matrix.ocv_ver }}/**/build/**/_deps
+      #      !*/.git/**/*
+      #    retention-days: 1
 
       - name: Upload
         if: always()
