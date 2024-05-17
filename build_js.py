@@ -131,6 +131,7 @@ class Builder:
                "-DBUILD_opencv_imgcodecs=OFF",
                "-DBUILD_opencv_shape=OFF",
                "-DBUILD_opencv_videoio=OFF",
+               "-DBUILD_opencv_video=OFF",
                "-DBUILD_opencv_videostab=OFF",
                "-DBUILD_opencv_highgui=OFF",
                "-DBUILD_opencv_superres=OFF",
