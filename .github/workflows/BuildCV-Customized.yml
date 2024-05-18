@@ -87,6 +87,7 @@ jobs:
           python opencv-${{ matrix.ocv_ver }}/platforms/js/build_js.py build_wasm \
             --build_wasm \
             --disable_single_file \
+            --simd \
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
