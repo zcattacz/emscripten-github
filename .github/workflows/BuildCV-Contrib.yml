@@ -69,7 +69,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: opencv/opencv
-          path: opencv-${{ matrix.ocv_ver }}
+          path: opencv
           ref: ${{ matrix.ocv_ver }}
           submodules: recursive
 
@@ -77,14 +77,14 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: opencv/opencv_contrib
-          path: opencv-contrib-${{ matrix.ocv_ver }}
+          path: opencv-contrib
           ref: ${{ matrix.ocv_ver }}
           submodules: recursive
           
       # patch build_js.py to disable modules like dnn etc.
       - name: Patch
         run: |
-          cp build_js_contrb.py opencv-${{matrix.ocv_ver}}/platforms/js/build_js.py
+          cp build_js_contrb.py opencv/platforms/js/build_js.py
 
       - name: Build
         shell: bash
@@ -92,7 +92,7 @@ jobs:
           export CC=${{ matrix.config.CC }}
           export CXX=${{ matrix.config.CXX }}
           emcmake \
-          python opencv-${{ matrix.ocv_ver }}/platforms/js/build_js.py build_wasm \
+          python opencv/platforms/js/build_js.py build_wasm \
             --build_wasm \
             --disable_single_file \
             --simd \
