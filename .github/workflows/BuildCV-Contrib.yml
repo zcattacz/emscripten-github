@@ -1,4 +1,4 @@
-name: BuildCV_Customized
+name: BuildCV_Contrib
 
 on:
   release:
