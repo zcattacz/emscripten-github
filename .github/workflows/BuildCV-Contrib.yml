@@ -84,7 +84,7 @@ jobs:
       # patch build_js.py to disable modules like dnn etc.
       - name: Patch
         run: |
-          cp build_js.py opencv-${{matrix.ocv_ver}}/platforms/js/
+          cp build_js_contrb.py opencv-${{matrix.ocv_ver}}/platforms/js/build_js.py
 
       - name: Build
         shell: bash
