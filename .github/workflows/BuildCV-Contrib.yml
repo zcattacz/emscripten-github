@@ -148,9 +148,9 @@ jobs:
           name: ${{ matrix.config.name }}-${{ matrix.ocv_ver }}.7z
 
       - name: Upload release asset
-        if: ${{ github.event_name == 'release' && \
-           (github.event.action == 'published' || github.event.action == 'created') \
-           !startsWith(github.event.inputs.tag, 'cvc-') }}
+        if: ${{ github.event_name == 'release'
+           && (github.event.action == 'published' || github.event.action == 'created')
+           && !startsWith(github.event.inputs.tag, 'cvc-') }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
