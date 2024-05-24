@@ -2,6 +2,7 @@ name: BuildCV_Customized
 
 on:
   release:
+    if: startsWith(github.event.inputs.tag, 'cv-')
     #types: [published, created]
     types: [created]
 
@@ -140,9 +141,8 @@ jobs:
           name: ${{ matrix.config.name }}-${{ matrix.ocv_ver }}.7z
 
       - name: Upload release asset
-        if: ${{ github.event_name == 'release'
+        if: github.event_name == 'release'
            && (github.event.action == 'published' || github.event.action == 'created')
-           && !startsWith(github.event.inputs.tag, 'cv-') }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
