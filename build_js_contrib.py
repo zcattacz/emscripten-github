@@ -129,7 +129,7 @@ class Builder:
                "-DBUILD_opencv_flann=OFF",  # No bindings provided. This module is used as a dependency for other modules.
                "-DBUILD_opencv_gapi=OFF",
                "-DBUILD_opencv_ml=OFF",
-               "-DBUILD_opencv_photo=OFF",
+               "-DBUILD_opencv_photo=ON", # requried by xphoto
                "-DBUILD_opencv_imgcodecs=OFF",
                "-DBUILD_opencv_shape=OFF",
                "-DBUILD_opencv_videoio=OFF",
@@ -164,7 +164,7 @@ class Builder:
             "-DBUILD_opencv_hdf=OFF",
             "-DBUILD_opencv_hfs=OFF",
             "-DBUILD_opencv_img_hash=OFF",
-            "-DBUILD_opencv_intensity_transform=OFF",
+            "-DBUILD_opencv_intensity_transform=ON",
             "-DBUILD_opencv_julia=OFF",
             "-DBUILD_opencv_line_descriptor=OFF",
             "-DBUILD_opencv_matlab=OFF",
