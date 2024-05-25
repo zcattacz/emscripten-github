@@ -220,7 +220,7 @@ xphoto = {
 }
 
 intensity_transform = {
-    '':[
+    '': [
         'autoscaling',
         'BIMEF',
         'contrastStretching',
@@ -230,7 +230,7 @@ intensity_transform = {
 }
 
 img_hash = {
-    [
+    '': [
         'averageHash',
         'blockMeanHash',
         'marrHildrethHash',
