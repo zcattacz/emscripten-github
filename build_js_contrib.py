@@ -91,7 +91,7 @@ class Builder:
                "-DCPU_DISPATCH=''",
                "-DCV_TRACE=OFF",
                "-DBUILD_SHARED_LIBS=OFF",
-               "-DOPENCV_EXTRA_MODULES_PATH=../opencv-contrib/modules"
+               "-DOPENCV_EXTRA_MODULES_PATH=../opencv-contrib/modules",
                "-DWITH_1394=OFF",
                "-DWITH_ADE=OFF",
                "-DWITH_VTK=OFF",
