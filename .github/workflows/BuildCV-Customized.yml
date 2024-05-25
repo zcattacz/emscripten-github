@@ -63,7 +63,7 @@ jobs:
         if: startsWith(matrix.config.ccache, 'ON')
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.config.name }}
+          key: ${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.config.name }}-${{ matrix.ocv_ver }}
           max-size: 500M
 
       - name: CPM Cache
@@ -73,7 +73,7 @@ jobs:
           path: $GITHUB_WORKSPACE/.cpmcache
           key: ${{ matrix.os }}-cpm-${{ hashFiles('**/') }}
           restore-keys: |
-            ${{ matrix.os }}-${{ matrix.config.name }}-cpm-
+            ${{ matrix.os }}-${{ matrix.config.name }}-${{ matrix.ocv_ver }}-cpm-
 
       # patch build_js.py to disable modules like dnn etc.
       - name: Patch
