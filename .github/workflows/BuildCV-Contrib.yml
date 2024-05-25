@@ -2,7 +2,7 @@ name: BuildCV_Contrib
 
 on:
   release:
-    if: startsWith(github.event.inputs.tag, 'cvc-')
+    if: ${{ startsWith(github.event.inputs.tag, 'cvc-') }}
     #types: [published, created]
     types: [created]
 jobs:
