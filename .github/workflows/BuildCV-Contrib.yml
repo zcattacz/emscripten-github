@@ -2,9 +2,9 @@ name: BuildCV_Contrib
 
 on:
   release:
-    if: ${{ startsWith(github.event.inputs.tag, 'cvc-') }}
-    #types: [published, created]
-    types: [created]
+    if: startsWith(github.event.inputs.tag, 'cvc-')
+    #types: [, created]
+    types: [published]
 jobs:
   build:
     name: ${{ matrix.config.name }}
@@ -30,16 +30,15 @@ jobs:
       - name: Print env
         run: |
           echo github.event.action: ${{ github.event.action }}
+          echo github.event.action: ${{ github.event.inputs.tag }}
           echo github.event_name: ${{ github.event_name }}
 
       - uses: mymindstorm/setup-emsdk@v9
       - name: print emscripten version
-        if: contains(matrix.config.name, 'emscripten')
         run: |
           emcc --version
 
       - name: Install dependencies on ubuntu
-        if: startsWith(matrix.config.name, 'ubuntu')
         run: |
           sudo apt-get update --fix-missing
           sudo apt-get install libopenjp2-7-dev zlib1g-dev
