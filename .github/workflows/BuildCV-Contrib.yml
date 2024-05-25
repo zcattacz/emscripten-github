@@ -85,7 +85,14 @@ jobs:
       - name: Patch
         run: |
           cp build_js_contrib.py opencv/platforms/js/build_js.py
-          
+
+          sed -r "s/(white_list =)/intensity_transform = {\'\': [\'autoscaling\', \'gammaCorrection\', \'logTransform\']}\n\1/" \
+              -i opencv/platforms/js/opencv_js.config.py
+          sed -r 's/(makeWhiteList\(\[[^]]+)/\1, intensity_transform/' \
+              -i opencv/platforms/js/opencv_js.config.py
+          echo "== After patch opencv_js.config.py"
+          grep "intensity_transform" opencv/platforms/js/opencv_js.config.py
+
           sed -r 's/ocv_define_module\(([^)]+)\)/ocv_define_module(\1 js)/' \
               -i opencv-contrib/modules/xphoto/CMakeLists.txt
           echo "after patch xphoto/CMakeLists.txt"
@@ -101,13 +108,6 @@ jobs:
               -i opencv/modules/js/src/core_bindings.cpp
           echo "== After patch modules/js/src/core_bindings.cpp"
           grep using opencv/modules/js/src/core_bindings.cpp
-
-          sed -r 's/(white_list =)/intensity_transform = {\'\': [\'autoscaling\', \'gammaCorrection\', \'logTransform\']}\n\1/' \
-              -i opencv/platforms/js/opencv_js.config.py
-          sed -r 's/(makeWhiteList\(\[[^]]+)/\1, intensity_transform/' \
-              -i opencv/platforms/js/opencv_js.config.py
-          echo "== After patch opencv_js.config.py"
-          grep "intensity_transform" opencv/platforms/js/opencv_js.config.py
 
       - name: Build
         shell: bash
