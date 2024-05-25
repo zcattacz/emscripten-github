@@ -16,12 +16,11 @@ def execute(cmd, shell=False):
         print("Executing: %s" % cmd)
         env = os.environ.copy()
         env['VERBOSE'] = '1'
-        retcode = subprocess.call(cmd, shell=shell, env=env, 
-                                  stderr=subprocess.STDOUT, 
-                                 stdout=subprocess.STDOUT)
-        if retcode < 0:
+        ret = subprocess.run(cmd, shell=shell, env=env, stderr=subprocess.PIPE)
+        print("Exec stderr (if any): %s", ret.output.decode())
+        if ret.returncode < 0:
             raise Fail("Child was terminated by signal: %s" % -retcode)
-        elif retcode > 0:
+        elif ret.returncode > 0:
             raise Fail("Child returned: %s" % retcode)
     except OSError as e:
         raise Fail("Execution failed: %d / %s" % (e.errno, e.strerror))
