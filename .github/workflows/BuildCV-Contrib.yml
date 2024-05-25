@@ -85,6 +85,7 @@ jobs:
       - name: Patch
         run: |
           cp build_js_contrib.py opencv/platforms/js/build_js.py
+          cp opencv_js.config_contrib.py opencv/platforms/js/opencv_js.config.py
 
       - name: Build
         shell: bash
