@@ -86,6 +86,16 @@ jobs:
         run: |
           cp build_js_contrib.py opencv/platforms/js/build_js.py
           cp opencv_js.config_contrib.py opencv/platforms/js/opencv_js.config.py
+          
+          sed -r 's/ocv_define_module\(([^)]+)\)/ocv_define_module(\1 js)/' \
+              -i opencv_contrib/modules/xphoto/CMakeLists.txt
+          sed -r 's/ocv_define_module\(([^)]+)\)/ocv_define_module(\1 js)/' \
+              -i opencv_contrib/modules/intensity_transform/CMakeLists.txt
+          
+          sed -r 's/(using namespace cv;)/\1\n\using namespace cv::intensity_transform;\n/' \
+              -i opencv/modules/js/src/core_bindings.cpp
+          sed -r 's/(using namespace cv;)/\1\n\using namespace cv::xphoto;\n/' \
+              -i opencv/modules/js/src/core_bindings.cpp
 
       - name: Build
         shell: bash
