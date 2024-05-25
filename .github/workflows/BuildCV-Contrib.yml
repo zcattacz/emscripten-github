@@ -14,7 +14,7 @@ jobs:
       matrix:
         config:
         - {
-            name: "opencv49-wasm-customized",
+            name: "opencv49-contrib-wasm-customized",
             os: ubuntu-latest,
             build_type: "Release",
             cc: "emcc",
@@ -23,7 +23,7 @@ jobs:
             code_coverage: "OFF",
             clang_format: "OFF"
         }
-        ocv_ver: ["4.5.5", "4.9.0", ""]
+        ocv_ver: ["4.9.0", ""]
     steps:
       - uses: actions/checkout@v3
 
@@ -70,7 +70,7 @@ jobs:
         if: startsWith(matrix.config.ccache, 'ON')
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.build_type }}
+          key: ${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.config.name }}
           max-size: 500M
 
       - name: CPM Cache
@@ -80,7 +80,7 @@ jobs:
           path: $GITHUB_WORKSPACE/.cpmcache
           key: ${{ matrix.os }}-cpm-${{ hashFiles('**/') }}
           restore-keys: |
-            ${{ matrix.os }}-cpm-
+            ${{ matrix.os }}-${{ matrix.config.name }}-cpm-
 
       # patch build_js.py to disable modules like dnn etc.
       - name: Patch
