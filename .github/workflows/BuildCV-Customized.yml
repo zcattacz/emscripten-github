@@ -87,6 +87,7 @@ jobs:
           emcmake \
           python opencv/platforms/js/build_js.py build_wasm \
             --build_wasm \
+            --emscripten_dir=$EMSDK \
             --disable_single_file \
             --simd \
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
