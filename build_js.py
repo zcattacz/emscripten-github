@@ -17,7 +17,7 @@ def execute(cmd, shell=False):
         env = os.environ.copy()
         env['VERBOSE'] = '1'
         retcode = subprocess.call(cmd, shell=shell, env=env, 
-                                  stderr=subprocess.STDERR, 
+                                  stderr=subprocess.STDOUT, 
                                  stdout=subprocess.STDOUT)
         if retcode < 0:
             raise Fail("Child was terminated by signal: %s" % -retcode)
