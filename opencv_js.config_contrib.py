@@ -210,7 +210,36 @@ calib3d = {
     ],
 }
 
-white_list = makeWhiteList([core, imgproc, objdetect, video, dnn, features2d, photo, calib3d])
+xphoto = {
+    '': [
+        'applyChannelGains',
+        'bm3dDenoising',
+        'dctDenoising',
+        'inpaint'
+    ]
+}
+
+intensity_transform = {
+    '':[
+        'autoscaling',
+        'BIMEF',
+        'contrastStretching',
+        'gammaCorrection',
+        'logTransform'
+    ]
+}
+
+img_hash = {
+    [
+        'averageHash',
+        'blockMeanHash',
+        'marrHildrethHash',
+        'pHash',
+        'radialVarianceHash'
+    ]
+}
+
+white_list = makeWhiteList([core, imgproc, objdetect, video, dnn, features2d, photo, calib3d, xphoto, intensity_transform])
 
 # namespace_prefix_override['dnn'] = ''  # compatibility stuff (enabled by default)
 # namespace_prefix_override['aruco'] = ''  # compatibility stuff (enabled by default)
