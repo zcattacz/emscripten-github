@@ -102,9 +102,9 @@ jobs:
           echo "== After patch modules/js/src/core_bindings.cpp"
           grep using opencv/modules/js/src/core_bindings.cpp
 
-          sed -r "s/(white_list =)/intensity_transform = {'': ['autoscaling', 'gammaCorrection', 'logTransform']}\n\1/" \
+          sed -r 's/(white_list =)/intensity_transform = {\'\': [\'autoscaling\', \'gammaCorrection\', \'logTransform\']}\n\1/' \
               -i opencv/platforms/js/opencv_js.config.py
-          sed -r "s/(makeWhiteList\(\[[^]]+)/\1, intensity_transform/" \
+          sed -r 's/(makeWhiteList\(\[[^]]+)/\1, intensity_transform/' \
               -i opencv/platforms/js/opencv_js.config.py
           echo "== After patch opencv_js.config.py"
           grep "intensity_transform" opencv/platforms/js/opencv_js.config.py
