@@ -64,6 +64,7 @@ jobs:
         with:
           key: ${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.config.name }}-${{ matrix.ocv_ver }}
           max-size: 500M
+          append-timestamp: false
 
       #- name: CPM Cache
       #  id: cache-cpm
