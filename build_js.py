@@ -13,7 +13,7 @@ class Fail(Exception):
 
 def execute(cmd, shell=False):
     try:
-        log.info("Executing: %s" % cmd)
+        print("Executing: %s" % cmd)
         env = os.environ.copy()
         env['VERBOSE'] = '1'
         retcode = subprocess.call(cmd, shell=shell, env=env)
