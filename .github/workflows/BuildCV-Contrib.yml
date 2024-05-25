@@ -22,7 +22,7 @@ jobs:
             code_coverage: "OFF",
             clang_format: "OFF"
         }
-        ocv_ver: ["4.7.0", ""]
+        ocv_ver: ["4.3.0", ""]
     steps:
       - uses: actions/checkout@v3
 
@@ -82,11 +82,12 @@ jobs:
 
       # cp opencv_js.config_contrib.py opencv/platforms/js/opencv_js.config.py
       # patch build_js.py to disable modules like dnn etc.
+      # sed -r "s/(white_list =)/intensity_transform = {\'\': [\'autoscaling\', \'gammaCorrection\', \'logTransform\']}\n\1/" \
       - name: Patch
         run: |
           cp build_js_contrib.py opencv/platforms/js/build_js.py
 
-          sed -r "s/(white_list =)/intensity_transform = {\'\': [\'autoscaling\', \'gammaCorrection\', \'logTransform\']}\n\1/" \
+          sed -r "s/(white_list =)/intensity_transform = {'': ['autoscaling', 'gammaCorrection', 'logTransform']}\n\1/" \
               -i opencv/platforms/js/opencv_js.config.py
           sed -r 's/(makeWhiteList\(\[[^]]+)/\1, intensity_transform/' \
               -i opencv/platforms/js/opencv_js.config.py
