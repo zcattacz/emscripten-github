@@ -214,8 +214,7 @@ xphoto = {
     '': [
         'applyChannelGains',
         'bm3dDenoising',
-        'dctDenoising',
-        'inpaint'
+        'dctDenoising'
     ]
 }
 
@@ -239,7 +238,8 @@ img_hash = {
     ]
 }
 
-white_list = makeWhiteList([core, imgproc, objdetect, video, dnn, features2d, photo, calib3d, xphoto, intensity_transform])
+#white_list = makeWhiteList([core, imgproc, objdetect, video, dnn, features2d, photo, calib3d, xphoto, intensity_transform])
+white_list = makeWhiteList([core, imgproc, photo, xphoto, intensity_transform])
 
 # namespace_prefix_override['dnn'] = ''  # compatibility stuff (enabled by default)
 # namespace_prefix_override['aruco'] = ''  # compatibility stuff (enabled by default)
