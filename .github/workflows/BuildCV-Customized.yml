@@ -59,6 +59,7 @@ jobs:
         if: startsWith(matrix.config.name, 'ubuntu')
         run: |
           sudo apt-get update --fix-missing
+          sudo apt-get install libopenjp2-7-dev zlib1g-dev
           #sudo apt-get install ninja-build
           #sudo apt-get install libgles2-mesa-dev
           #ninja --version
