@@ -19,7 +19,6 @@ jobs:
             build_type: "Release",
             cc: "emcc",
             cxx: "em++",
-            ccache: "ON",
             code_coverage: "OFF",
             clang_format: "OFF"
         }
@@ -66,10 +65,9 @@ jobs:
           submodules: recursive
 
       - name: ccache
-        if: startsWith(matrix.config.ccache, 'ON')
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ github.job }}-${{ matrix.os }}
+          key: ${{ matrix.config.name }}-${{ matrix.config.os }}
           max-size: 500M
           append-timestamp: false
 
