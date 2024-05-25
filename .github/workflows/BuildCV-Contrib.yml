@@ -92,20 +92,21 @@ jobs:
           cat opencv-contrib/modules/xphoto/CMakeLists.txt
           sed -r 's/ocv_define_module\(([^)]+)\)/ocv_define_module(\1 js)/' \
               -i opencv-contrib/modules/intensity_transform/CMakeLists.txt
-          echo "after patch intensity_transform/CMakeLists.txt"
+          echo "== After patch intensity_transform/CMakeLists.txt"
           cat opencv-contrib/modules/intensity_transform/CMakeLists.txt
           
           sed -r 's/(using namespace cv;)/\1\nusing namespace cv::intensity_transform;\n/' \
               -i opencv/modules/js/src/core_bindings.cpp
           sed -r 's/(using namespace cv;)/\1\nusing namespace cv::xphoto;\n/' \
               -i opencv/modules/js/src/core_bindings.cpp
-          echo "after patch modules/js/src/core_bindings.cpp"
+          echo "== After patch modules/js/src/core_bindings.cpp"
           grep using opencv/modules/js/src/core_bindings.cpp
 
-          sed -r "s/(white_list =)/intensity_transform = {'': ['autoscaling', 'gammaCorrection', 'logTransform']}\n\1/"
+          sed -r "s/(white_list =)/intensity_transform = {'': ['autoscaling', 'gammaCorrection', 'logTransform']}\n\1/" \
               -i opencv/platforms/js/opencv_js.config.py
-          sed -r "s/(makeWhiteList\(\[[^]]+)/\1, intensity_transform/"
+          sed -r "s/(makeWhiteList\(\[[^]]+)/\1, intensity_transform/" \
               -i opencv/platforms/js/opencv_js.config.py
+          echo "== After patch opencv_js.config.py"
           grep "intensity_transform" opencv/platforms/js/opencv_js.config.py
 
       - name: Build
