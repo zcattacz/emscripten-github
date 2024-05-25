@@ -19,9 +19,9 @@ def execute(cmd, shell=False):
         ret = subprocess.run(cmd, shell=shell, env=env, stderr=subprocess.PIPE)
         print("Exec stderr (if any): %s", ret.output.decode())
         if ret.returncode < 0:
-            raise Fail("Child was terminated by signal: %s" % -retcode)
+            raise Fail("Child was terminated by signal: %s" % -ret.returncode)
         elif ret.returncode > 0:
-            raise Fail("Child returned: %s" % retcode)
+            raise Fail("Child returned: %s" % ret.returncode)
     except OSError as e:
         raise Fail("Execution failed: %d / %s" % (e.errno, e.strerror))
 
