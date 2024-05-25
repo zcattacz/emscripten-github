@@ -17,7 +17,7 @@ def execute(cmd, shell=False):
         env = os.environ.copy()
         env['VERBOSE'] = '1'
         ret = subprocess.run(cmd, shell=shell, env=env, capture_output=True)
-        print("Exec stdout (if any): %s", ret.output.decode())
+        print("Exec stdout (if any): %s", ret.stdout.decode())
         print("Exec stderr (if any): %s", ret.stderr.decode())
         if ret.returncode < 0:
             raise Fail("Child was terminated by signal: %s" % -ret.returncode)
